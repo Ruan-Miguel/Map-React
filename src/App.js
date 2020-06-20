@@ -1,8 +1,10 @@
 import React from 'react'
 
+import SimpleMap from './components/SimpleMap'
+
 function App () {
   return (
-    <div></div>
+    <SimpleMap></SimpleMap>
   )
 }
 
