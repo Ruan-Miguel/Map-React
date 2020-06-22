@@ -1,13 +1,15 @@
 import React from 'react'
 
 /* import SimpleMap from './components/SimpleMap' */
-import GeolocationMap from './components/GeolocationMap'
+/* import GeolocationMap from './components/GeolocationMap' */
+import InteractiveMap from './components/InteractiveMap'
 
 function App () {
   return (
     <div>
       {/* <SimpleMap/> */}
-      <GeolocationMap/>
+      {/* <GeolocationMap/> */}
+      <InteractiveMap/>
     </div>
   )
 }
