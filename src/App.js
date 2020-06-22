@@ -1,16 +1,20 @@
 import React from 'react'
+import styled from 'styled-components'
 
-/* import SimpleMap from './components/SimpleMap' */
-/* import GeolocationMap from './components/GeolocationMap' */
-import InteractiveMap from './components/InteractiveMap'
+import Router from './routes'
+
+const Div = styled.div`
+display: flex;
+flex-direction: column;
+height: 100vh;
+width: 100vw;
+`
 
 function App () {
   return (
-    <div>
-      {/* <SimpleMap/> */}
-      {/* <GeolocationMap/> */}
-      <InteractiveMap/>
-    </div>
+    <Div>
+      <Router/>
+    </Div>
   )
 }
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
 export default styled.div`
-height: 100vh;
+flex-grow: 1;
 width: 100vw;
 `
