@@ -33,6 +33,11 @@ function handleDownEvent (evt) {
 
   if (feature) {
     console.log('acessou forma')
+
+    if (feature.get('name')) {
+      console.log(feature.get('name'))
+    }
+
     this.feature_ = feature
   } else {
     console.log('nao acessou forma')
@@ -54,7 +59,10 @@ function handleMoveEvent (evt) {
   }
 }
 
-const lineFeature = new Feature(new LineString([[-1e7, 1e6], [-1e6, 3e6]]))
+const lineFeature = new Feature({
+  geometry: new LineString([[-1e7, 1e6], [-1e6, 3e6]]),
+  name: 'primeira linha'
+})
 
 const polygonFeature = new Feature(
   new Polygon([[[-3e6, -1e6], [-3e6, 1e6],
