@@ -1,15 +1,22 @@
 import React from 'react'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 
 import Header from './components/Header'
-import SimpleMap from './components/SimpleMap'
+import SimpleMap from './components/Maps/SimpleMap'
+import GeolocationMap from './components/Maps/GeolocationMap'
+import InteractiveMap from './components/Maps/InteractiveMap'
 
 export default function Routes () {
   return (
     <BrowserRouter>
-      <Route path='/' component={Header}/>
+      <Route path='/' component={Header} />
       <Switch>
-        <Route path='/simpleMap' component={SimpleMap}/>
+        <Route path='/SimpleMap' component={SimpleMap} />
+        <Route path='/GeolocationMap' component={GeolocationMap}/>
+        <Route path='/InteractiveMap' component={InteractiveMap}/>
+        <Route exact path='*'>
+          <Redirect to={{ pathname: '/SimpleMap' }} />
+        </Route>
       </Switch>
     </BrowserRouter>
   )

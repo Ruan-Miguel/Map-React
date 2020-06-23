@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { ThemeProvider } from '@material-ui/core'
 import { makeStyles, unstable_createMuiStrictModeTheme as unstableCreateMuiStrictModeTheme } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
-import Divider from '@material-ui/core/Divider'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import MailIcon from '@material-ui/icons/Mail'
+import MapIcon from '@material-ui/icons/Map'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -36,6 +35,9 @@ export default function Header () {
   const classes = useStyles()
   const [state, setState] = useState(false)
 
+  const url = useLocation().pathname.slice(1)
+  console.log(url)
+
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return
@@ -48,22 +50,18 @@ export default function Header () {
     <div
       className={classes.list}
       role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+        {['SimpleMap', 'GeolocationMap', 'InteractiveMap'].map((text) => (
+          <ListItem
+            button
+            disabled={text === url}
+            component={Link} to={text}
+            key={text}
+            onClick={toggleDrawer(false)}
+            onKeyDown={toggleDrawer(false)}
+          >
+            <ListItemIcon><MapIcon/></ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}

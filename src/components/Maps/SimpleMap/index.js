@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import FullFill from '../FullFill'
+import FullFill from '../../FullFill'
 
 import 'ol/ol.css'
 import Map from 'ol/Map'
