@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 import FullFill from '../../FullFill'
 
-import axios from 'axios'
+import OpenStreetMap from '../../../services/OpenStreetMap'
 
 import 'ol/ol.css'
 import Feature from 'ol/Feature'
@@ -13,8 +13,8 @@ import { defaults as defaultInteractions, Pointer as PointerInteraction } from '
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer'
 import { OSM, Vector as VectorSource } from 'ol/source'
 import { Fill, Stroke, Style } from 'ol/style'
-
 import { useTheme } from '@material-ui/core/styles'
+import { defaults as defaultControls, ScaleLine } from 'ol/control'
 
 const Interaction = (function (PointerInteraction) {
   function Interaction () {
@@ -36,8 +36,8 @@ function handleDownEvent (evt) {
   const feature = evt.map.forEachFeatureAtPixel(evt.pixel, (feature) => feature)
 
   if (feature) {
-    if (feature.get('name')) {
-      console.log(feature.get('name'))
+    if (feature.get('info')) {
+      console.log(feature.get('info'))
     }
 
     this.feature_ = feature
@@ -68,6 +68,9 @@ function InteractiveMap () {
 
   useEffect(() => {
     const map = new Map({
+      controls: defaultControls().extend([
+        new ScaleLine()
+      ]),
       interactions: defaultInteractions().extend([new Interaction()]),
       layers: [
         new TileLayer({
@@ -76,87 +79,34 @@ function InteractiveMap () {
       ],
       target: 'map',
       view: new View({
-        center: [-38.3473088, -6.8440704],
-        projection: 'EPSG:4326',
-        zoom: 12
+        projection: 'EPSG:4326'
       })
     })
 
-    axios.get(`https://www.openstreetmap.org/api/0.6/relation/${placeId}/full`, {
-      headers: {
-        Accept: 'application/json'
-      }
-    }).then(({ data }) => {
-      const { elements } = data
+    OpenStreetMap.getPolygon(placeId).then(res => {
+      const place = new Polygon([res.coords])
 
-      const place = elements.find((element) => element.id === placeId)
-      const info = {
-        name: place.tags.name,
-        population: place.tags.population
-      }
-
-      const outerRefs = place.members.filter(member => member.role === 'outer')
-
-      const outers = elements.filter((element) => outerRefs.some(outerRef => outerRef.ref === element.id))
-
-      const matrixOuterNodes = outers.map(outer => outer.nodes)
-
-      const orderedOuterNodes = [matrixOuterNodes[0]]
-      matrixOuterNodes[0] = []
-
-      for (let aux = 1; aux < matrixOuterNodes.length; aux++) {
-        const lastArray = orderedOuterNodes[orderedOuterNodes.length - 1]
-
-        const nextArrayIndex = matrixOuterNodes.findIndex((arrayOuterNodes) => {
-          const haveTheNumber = arrayOuterNodes.includes(lastArray[lastArray.length - 1])
-
-          if (haveTheNumber) {
-            return true
-          }
-
-          return false
-        })
-
-        if (matrixOuterNodes[nextArrayIndex][0] !== lastArray[lastArray.length - 1]) {
-          matrixOuterNodes[nextArrayIndex].reverse()
-        }
-
-        orderedOuterNodes.push(matrixOuterNodes[nextArrayIndex])
-        matrixOuterNodes[nextArrayIndex] = []
-      }
-
-      const polygonNodes = []
-
-      orderedOuterNodes.forEach((elementsArray, index) => {
-        if (index !== orderedOuterNodes.length - 1) {
-          elementsArray.pop()
-        }
-
-        polygonNodes.push(...elementsArray)
+      const mapView = map.getView()
+      mapView.fit(place, {
+        padding: [50, 50, 50, 50]
       })
 
-      const polygonCoords = polygonNodes.map((node) => {
-        const nodeInformation = elements.find((element) => element.id === node)
-
-        return [nodeInformation.lon, nodeInformation.lat]
-      })
-
-      const testFeature = new Feature({
-        geometry: new Polygon([polygonCoords]),
-        name: info
+      const placeFeature = new Feature({
+        geometry: place,
+        info: res.info
       })
 
       map.addLayer(new VectorLayer({
         source: new VectorSource({
-          features: [testFeature]
+          features: [placeFeature]
         }),
         style: new Style({
           stroke: new Stroke({
-            width: 3,
-            color: primaryColor
+            width: 2,
+            color: secondaryColor
           }),
           fill: new Fill({
-            color: secondaryColor
+            color: primaryColor
           })
         })
       }))
