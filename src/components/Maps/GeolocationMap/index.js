@@ -14,6 +14,7 @@ import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style'
 
 const view = new View({
   center: [0, 0],
+  projection: 'EPSG:4326',
   zoom: 2
 })
 

@@ -101,7 +101,7 @@ function InteractiveMap () {
   })
 
   return (
-    <FullFill id='map'/>
+    <FullFill id='map' />
   )
 }
 

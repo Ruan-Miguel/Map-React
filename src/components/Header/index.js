@@ -36,7 +36,6 @@ export default function Header () {
   const [state, setState] = useState(false)
 
   const url = useLocation().pathname.slice(1)
-  console.log(url)
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -52,7 +51,7 @@ export default function Header () {
       role="presentation"
     >
       <List>
-        {['SimpleMap', 'GeolocationMap', 'InteractiveMap'].map((text) => (
+        {['SimpleMap', 'GeolocationMap', 'InteractiveMap', 'TestMap'].map((text) => (
           <ListItem
             button
             disabled={text === url}
