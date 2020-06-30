@@ -2,67 +2,42 @@ import React, { useEffect } from 'react'
 
 import FullFill from '../../FullFill'
 
+import getInteraction from './interaction'
+
 import OpenStreetMap from '../../../services/OpenStreetMap'
+
+import Paper from '@material-ui/core/Paper'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 
 import 'ol/ol.css'
 import Feature from 'ol/Feature'
 import Map from 'ol/Map'
 import View from 'ol/View'
 import { Polygon } from 'ol/geom'
-import { defaults as defaultInteractions, Pointer as PointerInteraction } from 'ol/interaction'
+import { defaults as defaultInteractions } from 'ol/interaction'
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer'
 import { OSM, Vector as VectorSource } from 'ol/source'
 import { Fill, Stroke, Style } from 'ol/style'
-import { useTheme } from '@material-ui/core/styles'
 import { defaults as defaultControls, ScaleLine } from 'ol/control'
 
-const Interaction = (function (PointerInteraction) {
-  function Interaction () {
-    PointerInteraction.call(this, {
-      handleDownEvent: handleDownEvent,
-      handleMoveEvent: handleMoveEvent
-    })
-
-    this.feature_ = null
+const useStyles = makeStyles((theme) => ({
+  map: {
+    position: 'relative'
+  },
+  paper: {
+    position: 'absolute',
+    right: 0,
+    height: '100%',
+    width: '30%',
+    zIndex: 1
   }
-
-  Interaction.prototype = Object.create(PointerInteraction && PointerInteraction.prototype)
-  Interaction.prototype.constructor = Interaction
-
-  return Interaction
-}(PointerInteraction))
-
-function handleDownEvent (evt) {
-  const feature = evt.map.forEachFeatureAtPixel(evt.pixel, (feature) => feature)
-
-  if (feature) {
-    if (feature.get('info')) {
-      console.log(feature.get('info'))
-    }
-
-    this.feature_ = feature
-  } else {
-    this.feature_ = null
-  }
-}
-
-function handleMoveEvent (evt) {
-  const feature = evt.map.forEachFeatureAtPixel(evt.pixel, (feature) => feature)
-
-  const element = evt.map.getTargetElement()
-
-  if (feature) {
-    if (element.style.cursor !== 'pointer') {
-      element.style.cursor = 'pointer'
-    }
-  } else if (element.style.cursor !== 'default') {
-    element.style.cursor = 'default'
-  }
-}
+}))
 
 const placeId = 301389
 
 function InteractiveMap () {
+  const classes = useStyles()
+
   const primaryColor = useTheme().palette.primary.main
   const secondaryColor = useTheme().palette.secondary.light
 
@@ -71,7 +46,7 @@ function InteractiveMap () {
       controls: defaultControls().extend([
         new ScaleLine()
       ]),
-      interactions: defaultInteractions().extend([new Interaction()]),
+      interactions: defaultInteractions().extend([getInteraction()]),
       layers: [
         new TileLayer({
           source: new OSM()
@@ -114,7 +89,9 @@ function InteractiveMap () {
   })
 
   return (
-    <FullFill id='map' />
+    <FullFill className={classes.map} id='map'>
+      <Paper className={classes.paper} elevation={3} square></Paper>
+    </FullFill>
   )
 }
 
