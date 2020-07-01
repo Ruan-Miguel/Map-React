@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import FullFill from '../../FullFill'
 
@@ -19,27 +19,35 @@ const useStyles = makeStyles(() => ({
     position: 'relative'
   },
   paper: {
+    opacity: 0.3,
+    transition: 'opacity 1s',
     position: 'absolute',
     right: 0,
     height: '100%',
     width: '30%',
-    zIndex: 1
+    zIndex: 1,
+    '&:hover': {
+      opacity: 1,
+      transition: 'opacity 1s'
+    }
   }
 }))
 
 const map = getMap()
-map.addInteraction(getInteraction())
 
 const placeId = 301389
 
 function InteractiveMap () {
   const classes = useStyles()
 
+  const [info, setInfo] = useState({})
+
   const primaryColor = useTheme().palette.primary.main
   const secondaryColor = useTheme().palette.secondary.light
 
   useEffect(() => {
     map.setTarget('map')
+    map.addInteraction(getInteraction(setInfo))
 
     OpenStreetMap.getPolygon(placeId).then(res => {
       const place = new Polygon([res.coords])
@@ -56,11 +64,20 @@ function InteractiveMap () {
 
       map.addLayer(getVectorLayer(placeFeature, secondaryColor, primaryColor))
     })
-  })
+  }, [])
 
   return (
     <FullFill className={classes.map} id='map'>
-      <Paper className={classes.paper} elevation={3} square></Paper>
+      <Paper
+        style={{ display: (Object.keys(info).length === 0) ? 'none' : 'block' }}
+        className={classes.paper}
+        elevation={3}
+        square
+      >
+        {Object.entries(info).map(pair => (
+          <div key={pair[0]}>{pair[0]}: {pair[1]}</div>
+        ))}
+      </Paper>
     </FullFill>
   )
 }

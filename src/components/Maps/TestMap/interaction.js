@@ -1,16 +1,17 @@
 import { Pointer as PointerInteraction } from 'ol/interaction'
 
-function handleDownEvent (evt) {
+const handleDownEvent = (handleFunction) => function (evt) {
   const feature = evt.map.forEachFeatureAtPixel(evt.pixel, (feature) => feature)
 
   if (feature) {
-    if (feature.get('info')) {
-      console.log(feature.get('info'))
-    }
-
     this.feature_ = feature
+    if (this.feature_.get('info')) {
+      handleFunction(this.feature_.get('info'))
+      console.log(this.feature_.get('info'))
+    }
   } else {
     this.feature_ = null
+    handleFunction({})
   }
 }
 
@@ -28,11 +29,14 @@ function handleMoveEvent (evt) {
   }
 }
 
-export function getInteraction () {
-  return new PointerInteraction({
-    handleDownEvent: handleDownEvent,
-    handleMoveEvent: handleMoveEvent
+export function getInteraction (handleFunction) {
+  const test = new PointerInteraction({
+    handleDownEvent: handleDownEvent(handleFunction),
+    handleMoveEvent: handleMoveEvent,
+    feature_: null
   })
+
+  return test
 }
 
 export default getInteraction
