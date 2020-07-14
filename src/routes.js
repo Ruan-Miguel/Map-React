@@ -5,7 +5,8 @@ import Header from './components/Header'
 import SimpleMap from './components/Maps/SimpleMap'
 import GeolocationMap from './components/Maps/GeolocationMap'
 import InteractiveMap from './components/Maps/InteractiveMap'
-import TestMap from './components/Maps/TestMap'
+import Marizopolis from './components/Maps/Marizopolis'
+import WMS from './components/Maps/WMS'
 
 export default function Routes () {
   return (
@@ -15,7 +16,8 @@ export default function Routes () {
         <Route path='/SimpleMap' component={SimpleMap} />
         <Route path='/GeolocationMap' component={GeolocationMap}/>
         <Route path='/InteractiveMap' component={InteractiveMap}/>
-        <Route path='/TestMap' component={TestMap}/>
+        <Route path='/Marizopolis' component={Marizopolis}/>
+        <Route path='/WMS' component={WMS}/>
         <Route exact path='*'>
           <Redirect to={{ pathname: '/SimpleMap' }} />
         </Route>

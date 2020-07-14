@@ -42,8 +42,7 @@ function InteractiveMap () {
 
   const [info, setInfo] = useState({})
 
-  const primaryColor = useTheme().palette.primary.main
-  const secondaryColor = useTheme().palette.secondary.light
+  const palette = useTheme().palette
 
   useEffect(() => {
     map.setTarget('map')
@@ -62,9 +61,13 @@ function InteractiveMap () {
         info: res.info
       })
 
-      map.addLayer(getVectorLayer(placeFeature, secondaryColor, primaryColor))
+      map.addLayer(getVectorLayer(placeFeature, palette.secondary.light, palette.primary.main))
     })
-  }, [])
+
+    return function clean () {
+      map.setTarget('')
+    }
+  }, [palette])
 
   return (
     <FullFill className={classes.map} id='map'>

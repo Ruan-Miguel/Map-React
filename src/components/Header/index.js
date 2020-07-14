@@ -51,7 +51,7 @@ export default function Header () {
       role="presentation"
     >
       <List>
-        {['SimpleMap', 'GeolocationMap', 'InteractiveMap', 'TestMap'].map((text) => (
+        {['SimpleMap', 'GeolocationMap', 'InteractiveMap', 'Marizopolis', 'WMS'].map((text) => (
           <ListItem
             button
             disabled={text === url}
