@@ -7,6 +7,7 @@ import GeolocationMap from './components/Maps/GeolocationMap'
 import InteractiveMap from './components/Maps/InteractiveMap'
 import Marizopolis from './components/Maps/Marizopolis'
 import WMS from './components/Maps/WMS'
+import WFS from './components/Maps/WFS'
 
 export default function Routes () {
   return (
@@ -18,6 +19,7 @@ export default function Routes () {
         <Route path='/InteractiveMap' component={InteractiveMap}/>
         <Route path='/Marizopolis' component={Marizopolis}/>
         <Route path='/WMS' component={WMS}/>
+        <Route path='/WFS' component={WFS}/>
         <Route exact path='*'>
           <Redirect to={{ pathname: '/SimpleMap' }} />
         </Route>
