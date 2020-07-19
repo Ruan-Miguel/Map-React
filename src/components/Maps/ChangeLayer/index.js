@@ -34,7 +34,9 @@ export default function ChangeLayerMap() {
     const [rochas, setRochas] = useState(false)
 
     const baciaLayer = getLayer(wmsSource)
+    baciaLayer.set('name', 'bacia')
     const rochaLayer = getLayer(wmsSource2)
+    rochaLayer.set('name', 'rocha')
 
     useEffect(() => {
         map.setTarget('map')
@@ -54,8 +56,11 @@ export default function ChangeLayerMap() {
                         console.log(map.addLayer(baciaLayer))
 
                     } else {
-                        // Todo corrigir remoção de layer
-                        map.getLayers().remove(baciaLayer)
+                        map.getLayers().forEach(layer => {
+                            if (layer.get('name') && layer.get('name') === 'bacia'){
+                                map.removeLayer(layer)
+                            }
+                        });
                     }
                 }
                 }/></li>
@@ -64,8 +69,11 @@ export default function ChangeLayerMap() {
                     if(!rochas){
                         map.addLayer(rochaLayer)
                     } else {
-                        // Todo corrigir remoção de layer
-                        map.removeLayer(rochaLayer)
+                        map.getLayers().forEach(layer => {
+                            if (layer.get('name') && layer.get('name') === 'rocha'){
+                                map.removeLayer(layer)
+                            }
+                        });
                     }
                 }
                 }/></li>
