@@ -8,6 +8,7 @@ import InteractiveMap from './components/Maps/InteractiveMap'
 import Marizopolis from './components/Maps/Marizopolis'
 import WMS from './components/Maps/WMS'
 import WFS from './components/Maps/WFS'
+import ChangeLayerMap from "./components/Maps/ChangeLayer";
 
 export default function Routes () {
   return (
@@ -20,6 +21,7 @@ export default function Routes () {
         <Route path='/Marizopolis' component={Marizopolis}/>
         <Route path='/WMS' component={WMS}/>
         <Route path='/WFS' component={WFS}/>
+        <Route path='/ChangeLayerMap' component={ChangeLayerMap}/>
         <Route exact path='*'>
           <Redirect to={{ pathname: '/SimpleMap' }} />
         </Route>
